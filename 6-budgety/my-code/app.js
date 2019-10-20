@@ -14,7 +14,7 @@
  *  2) Setting up the first Event Listener
  *  3) Getting the User Input
  *  4) Adding the Budget Item to the Budget Controller
- *
+ *  5) Adding the Budget Item to the Graphical User Interface
  *
  * Designing a module pattern
  * -------------------------------------------------------------------------
@@ -88,6 +88,16 @@
  * the #createBudgetItem method, then the item is inserted into the Budget
  * Controller.
  *
+ * Adding the Budget Item to the Graphical User Interface
+ * -------------------------------------------------------------------------
+ * UIController module handles the insertion of Budget Items to the user
+ * interface. The method takes an Budget Item as inpur argument and then checks
+ * whether the item is an expense or an income. The #insertBudgetItem method
+ * goes through three essential steps:
+ *
+ *  1. Creates a html string which can be inserted in the webpage.
+ *  2. Replaces the placeholder text.
+ *  3. Inserts the html into the Document Object Model.
  */
 
 /*var testController = (function() {
@@ -216,7 +226,7 @@ var UIController = (function() {
      */
     var domStrings = {
             addButton: '.add__btn',
-            expenseContainter: '.expenses__list',
+            expensesContainer: '.expenses__list',
             incomeContainer: '.income__list',
             inputType: '.add__type',
             inputDescription: '.add__description',
@@ -249,6 +259,55 @@ var UIController = (function() {
 			// number = parseFloat(document.querySelector(domStrings.inputValue).value);
 			// console.log('The value as a number: %d', number);
 			// return budgetController.createBudgetItem(type, '', value);
+		},
+
+		insertBudgetItem: function(budgetItem) {
+			console.groupCollapsed('Inserting a Budget Item into the html.');
+			console.log('#insertBudgetItem');
+			console.log('Received BudgetItem [type=%s, description=%s, value=%d]',
+					budgetItem.type, budgetItem.description, budgetItem.value);
+
+			// 1. Create html-string with placeholder text.
+			// html - the string which is inserted into the html file.
+			// element - the string is inserted after this element.
+			var html, element;
+			if (budgetItem.type === EXPENSE) {
+				html    = '<div class=\'item clearfix\' id=\'expense-0\'>'
+				        + '  <div class=\'item__description\'>%description%</div>'
+						+ '  <div class=\'right clearfix\'>'
+						+ '    <div class=\'item__value\'>- %value%</div>'
+						+ '    <div class=\'item__percentage\'>0%</div>'
+						+ '    <div class=\'item__delete\'>'
+						+ '      <button class=\'item__delete--btn\'><i class=\'ion-ios-close-outline\'></i></button>'
+						+ '    </div>'
+						+ '  </div>'
+						+ '</div>';
+				element = domStrings.expensesContainer;
+			} else {
+				html    = '<div class=\'item clearfix\' id=\'income-0\'>'
+						+ '  <div class=\'item__description\'>%description%</div>'
+						+ '  <div class=\'right clearfix\'>'
+						+ '    <div class=\'item__value\'>+ %value%</div>'
+						+ '    <div class=\'item__delete\'>'
+						+ '      <button class=\'item__delete--btn\'><i class=\'ion-ios-close-outline\'></i></button>'
+						+ '    </div>'
+						+ '  </div>'
+						+ '</div>';
+				element = domStrings.incomeContainer; 
+			}
+			console.log('html text without placeholder text=%s', html);
+			console.log('Html element=%s', element);
+
+			// 2. Replace placeholder test.
+			// html = html.replace('%id%', item.id);
+			html = html.replace('%description%', item.description);
+			html = html.replace('%value%', item.value);
+			console.log('html text=%s', html);
+
+			// 3. Insert html-string into the Document Object Model.
+			document.querySelector(element).insertAdjacentHTML('beforeend', html);
+
+			console.groupEnd();
 		}
 	}
 
@@ -310,6 +369,9 @@ var controller = (function(budgetCtrl, UICtrl) {
 		// This line just test whether the Budget Items successfully are added
 		// to the Budget Controller.
 		budgetController.testPrintAll();
+
+		// 4. Insert the Budget Item to the Graphical User Interface
+		UIController.insertBudgetItem(budgetItem);
 
 		console.groupEnd();
 	};
