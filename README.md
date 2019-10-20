@@ -1,4 +1,157 @@
-# Course Material and FAQ for my Complete JavaScript Course
+Learning the javascript programming language
+===============================================================================
+The documentation from the original repository is found [here](#jonas-repo)
+
+General Javascript
+===============================================================================
+
+Self-invoking functions
+-------------------------------------------------------------------------------
+A self-invoking function is automatically started after the function
+declaration. For example:
+```
+(function() {
+	console.log('Test.');
+}) ();
+```
+Executing a Javascript script containing the above code will automatically
+print 'Test' to the console.
+
+Functions used as values
+-------------------------------------------------------------------------------
+A javascript function can be called and the result might be stored as a
+variable. An example is given below:
+```
+function testController() {
+    return {
+        testMethod: function() {
+            console.log('Execute test method.');
+        }
+    }
+};
+var my_function = testController();
+my_function.testMethod();
+```
+
+Function Expressions
+-------------------------------------------------------------------------------
+Rather than declaring and implementing a function and then storing the result
+as a variable, one can directly evaluate the result from a function and store
+it as a variable.
+```
+var testController = function() {
+    return {
+        test_method: function() {
+            console.log('Execute test method.');
+		}
+	}
+ };
+```
+Scope of a function
+-------------------------------------------------------------------------------
+A function might contain several nested functions, but having only a few of the
+functions exposed to the public interface. An object might need several helping
+methods in order to execute on method. These helping functions are private if
+they are stored as variables inside the function. The following function has
+one private and one public method:
+```
+function testController() {
+	var privateMethod = (function() {
+		// Inaccessible
+	}
+
+	return {
+		publicMethod = (function() {
+			console.log('Accessible method.');
+		}
+	}
+}
+```
+
+Arrays
+-------------------------------------------------------------------------------
+Accessing data from objects and arrays is done different with javascript from
+how it is done with Java and PHP. Given an object that has an array as one of
+its variables:
+```
+var data = {
+    items: [],
+    totals: {
+    	exp: 0,
+    	inc: 0
+    }
+}
+```
+I would like to iterate over the items array and access every items in it.  
+__Note:__ Iterating over items in an array is done using the for-of loop rather
+than using the for-in loop. In javascript the for-in loop iterates over the
+properties of an object, which is not what we normally want to do.
+``` 
+for (item of data['items']) {
+    console.log(item);
+}
+```
+
+Working with User Inputs
+-------------------------------------------------------------------------------
+User pressing a button on the keyboard can be registered using the an
+Event-Listener:
+```
+document.addEventListener('keypress', function(event) {
+    // Execute code.
+}
+```
+One can register clicks on a button using the following command if 
+'add__btn' is a button.
+```
+document.querySelector('.add__btn').addEventListener('click', function() {			
+    console.log('Registered click.');
+}
+```
+
+Throwing Errors
+-------------------------------------------------------------------------------
+When working with user inputs, one must always consider illegal input. I
+comment three things when a method is throwing an error.
+ 1. Error name.
+ 2. Description of why it is neccessary to throw an error.
+ 3. If the error is thrown from an other function, then I defines that 
+    function as the root for this exception.
+
+Logging
+-------------------------------------------------------------------------------
+The logging to the console should group information in chucks which are
+related to each other. How this is done is descriped
+[here](https://stackify.com/javascript-logging-basic-tips/).
+
+Good practice for logging is to group the logs into sections which are
+relevant for a particular action. For example, every log relevant to the
+insertion of a new Budget Item is grouped:
+```
+console.group('Inserting Budget item.');
+console.log('Parsed successfully.');
+console.groupEnd();
+```
+Collapsed group for logging
+-------------------------------------------------------------------------------
+For this project I want to iterate over the items array for checking which
+Budget Items are inserted. After some Budget Items are inserted, then the
+entire console is filled with Budget Items. I want a Collapsed Group, which can
+be opened for displaying every Budget Item. Groups can be nested and I use the
+following code for logging the Budget Items:
+```
+console.groupCollapsed('Budget Items in Budget Controller');
+for (item of data['items']) {
+    console.log(item);
+}
+console.groupEnd(); // Remember to close group.
+
+
+More information about advanced logging is found [here](https://mariusschulz.com/blog/advanced-javascript-logging-using-console-group)
+
+```
+
+# <a name='jonas-repo'></a>Course Material and FAQ for my Complete JavaScript Course
 
 This repo contains starter files and the finished project files for all the projects contained in the course.
 
