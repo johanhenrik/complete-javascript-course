@@ -103,6 +103,23 @@
  *
  * Clearing the input fields
  * -------------------------------------------------------------------------
+ * Clearing the input fields is easily done using a querySelector and then
+ * setting the values for these fields to an empty string (''):
+ *
+ *   querySelector(field).value = '';
+ *
+ * Calculating the budget
+ * -------------------------------------------------------------------------
+ * Calculation of the budget is done by the budgetController using the method:
+ * #calculateBudget.
+ * My implementation has not seperated the income and the expenses into 
+ * different arrays and thus, the method must iterate over all the Budget Items
+ * every time a new income or a new expenses item is added into the UI.
+ *
+ * There is one problem calculating the percentage of income used. If no
+ * income is inserted and an outcome is inserted, then the program tries do
+ * divide the expenses with zero. The desired result is to return 100%.  
+ *
  */
 
 /*var testController = (function() {
@@ -176,6 +193,37 @@ var budgetController = (function() {
 			//return false;
 ////		return 
 		},
+
+		calculateBudget: function() {
+			var income=0, expenses=0 , budget=0;
+			console.groupCollapsed('Calculating currnet budget.');
+			console.log('First iterate over every budget item.');
+			for (item of data['items']) {
+				console.log('Item [type=' + item.type + ',description=' + item.description
+						+ ',value=' + item.value + ']');
+				console.log(item);
+				if (item.type === INCOME) {
+					console.log('Income [description=' + item.description + ',value'
+							+ item.value + ']');
+					income += item.value;
+					console.log('Total income=' + income);
+				} else {
+					console.log('Expense [description=' + item.description + ',value'
+							+ item.value + ']');
+					expenses += item.value;
+					console.log('Total expenses=' + expenses);
+				}
+			}
+			console.log('Budget is=' + (income - expenses).valueOf())
+			if (income === 0) {
+				percentage = 100;
+			} else {
+				percentage = parseInt(expenses / income	* 100);
+			}
+			console.log('Percentage=' + percentage);
+			console.groupEnd();
+		},
+
 
 		/*
 		 * Creates a Budget Item from the given data values.
@@ -388,7 +436,18 @@ var controller = (function(budgetCtrl, UICtrl) {
 		UIController.clearInputFields();
 
 		// 6. Update budget
+		updateBudget();
+
 		console.groupEnd();
+	};
+
+	var updateBudget = function() {
+
+		// 1. Calculate the budget
+		budgetController.calculateBudget();
+		// 2. Return the budget
+
+		// 3. Display the budget on the UI
 	};
 
 	
