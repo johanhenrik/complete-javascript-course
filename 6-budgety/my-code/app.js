@@ -15,6 +15,8 @@
  *  3) Getting the User Input
  *  4) Adding the Budget Item to the Budget Controller
  *  5) Adding the Budget Item to the Graphical User Interface
+ *  6) Clearing the input fields
+ *  7) Updating the budget
  *
  * Designing a module pattern
  * -------------------------------------------------------------------------
@@ -98,6 +100,9 @@
  *  1. Creates a html string which can be inserted in the webpage.
  *  2. Replaces the placeholder text.
  *  3. Inserts the html into the Document Object Model.
+ *
+ * Clearing the input fields
+ * -------------------------------------------------------------------------
  */
 
 /*var testController = (function() {
@@ -234,7 +239,22 @@ var UIController = (function() {
     };
 
 	return {
-		
+	
+		/*
+		 * Values for 'inputDescription' and 'inputValue' is removed from the
+		 * user interface.
+		 */
+		clearInputFields: function() {
+			console.groupCollapsed('Removing data from the input fields.');
+			// Input fields to reset:
+			fields = [domStrings.inputDescription, domStrings.inputValue];
+			for (field of fields) {
+				console.log('Reseting data value of dom element with class=%s', field);
+				document.querySelector(field).value = '';
+			}
+			console.groupEnd();
+		},
+	
 		/*
 		 * Collects the data in the user interface provided by a user.
 		 *
@@ -250,15 +270,6 @@ var UIController = (function() {
                 description: document.querySelector(domStrings.inputDescription).value,
                 value: document.querySelector(domStrings.inputValue).value
 			};
-			// Check whether it is an expense item or an income itom.	
-			// type = document.querySelector(domStrings.inputType).value;
-			// console.log('Input type is: %s', type);
-			// This method checks whether the input is a valid number.
-			// value = document.querySelector(domStrings.inputValue).value;
-			// console.log('The strings value: %s', value);
-			// number = parseFloat(document.querySelector(domStrings.inputValue).value);
-			// console.log('The value as a number: %d', number);
-			// return budgetController.createBudgetItem(type, '', value);
 		},
 
 		insertBudgetItem: function(budgetItem) {
@@ -373,6 +384,10 @@ var controller = (function(budgetCtrl, UICtrl) {
 		// 4. Insert the Budget Item to the Graphical User Interface
 		UIController.insertBudgetItem(budgetItem);
 
+		// 5. Clear the fields
+		UIController.clearInputFields();
+
+		// 6. Update budget
 		console.groupEnd();
 	};
 

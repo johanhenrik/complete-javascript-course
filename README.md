@@ -86,7 +86,7 @@ I would like to iterate over the items array and access every items in it.
 __Note:__ Iterating over items in an array is done using the for-of loop rather
 than using the for-in loop. In javascript the for-in loop iterates over the
 properties of an object, which is not what we normally want to do.
-``` 
+```
 for (item of data['items']) {
     console.log(item);
 }
@@ -101,7 +101,7 @@ document.addEventListener('keypress', function(event) {
     // Execute code.
 }
 ```
-One can register clicks on a button using the following command if 
+One can register clicks on a button using the following command if
 'add__btn' is a button.
 ```
 document.querySelector('.add__btn').addEventListener('click', function() {			
@@ -109,13 +109,28 @@ document.querySelector('.add__btn').addEventListener('click', function() {
 }
 ```
 
+DOM Manipulation
+-------------------------------------------------------------------------------
+The _insertAdjacentHTML_ method is used for placing text inside a html document
+relative to a _html-element_. The method has the following syntax:
+```
+document.querySelector(element).insertAdjacentHTML(position, text);
+```
+The new text can be placed before or after the element and it can also be placed
+inside, either as the first child or the last child. The four different
+placement options are:
+  * 'beforebegin'
+  * 'afterbegin'
+  * 'beforeend'
+  * 'afterend'
+
 Throwing Errors
 -------------------------------------------------------------------------------
 When working with user inputs, one must always consider illegal input. I
 comment three things when a method is throwing an error.
  1. Error name.
  2. Description of why it is neccessary to throw an error.
- 3. If the error is thrown from an other function, then I defines that 
+ 3. If the error is thrown from an other function, then I defines that
     function as the root for this exception.
 
 Logging
