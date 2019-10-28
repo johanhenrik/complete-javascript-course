@@ -17,6 +17,7 @@
  *  5) Adding the Budget Item to the Graphical User Interface
  *  6) Clearing the input fields
  *  7) Updating the budget
+ *  8) Updating the budget in the Graphical User Interface
  *
  * Designing a module pattern
  * -------------------------------------------------------------------------
@@ -120,6 +121,12 @@
  * income is inserted and an outcome is inserted, then the program tries do
  * divide the expenses with zero. The desired result is to return 100%.  
  *
+ * Updating the budget in the graphical user interface
+ * -------------------------------------------------------------------------
+ * I create a method for the User Interface Controller called #updateBudget
+ * which is used for updating the data values for the budget in the user
+ * interface. 
+ * 
  */
 
 /*var testController = (function() {
@@ -165,7 +172,8 @@ var budgetController = (function() {
 		items: [],
 		totals: {
 			exp: 0,
-			inc: 0
+			inc: 0,
+			percentage: 0
 		}
 	};
 
@@ -214,13 +222,15 @@ var budgetController = (function() {
 					console.log('Total expenses=' + expenses);
 				}
 			}
+			data.totals.income = income;
+			data.totals.expenses = expenses;
 			console.log('Budget is=' + (income - expenses).valueOf())
 			if (income === 0) {
-				percentage = 100;
+				data.totals.percentage = 100;
 			} else {
-				percentage = parseInt(expenses / income	* 100);
+				data.totals.percentage = parseInt(expenses / income	* 100);
 			}
-			console.log('Percentage=' + percentage);
+			console.log('Percentage=' + data.totals.percentage);
 			console.groupEnd();
 		},
 
@@ -247,6 +257,14 @@ var budgetController = (function() {
 //			this.description = description;
 //			this.value = value;
 			return new BudgetItem(type, description, value);
+		},
+
+		getBudget: function() {
+			return {
+				expenses: data.totals.expenses,
+				income: data.totals.income,
+				percentage: data.totals.percentage
+			}
 		},
 
 		testPrintAll: function() {
@@ -283,7 +301,10 @@ var UIController = (function() {
             incomeContainer: '.income__list',
             inputType: '.add__type',
             inputDescription: '.add__description',
-            inputValue: '.add__value'
+            inputValue: '.add__value',
+			percentageSpent: '.budget__expenses--percentage',
+			totalIncome: '.budget__income--value',
+			totalExpenses: '.budget__expenses--value'
     };
 
 	return {
@@ -367,7 +388,26 @@ var UIController = (function() {
 			document.querySelector(element).insertAdjacentHTML('beforeend', html);
 
 			console.groupEnd();
+		},
+
+		setBudget: function(budget) {
+			console.groupCollapsed('Update budget of the GUI');
+			console.log('User Interface Controller #setBudget');
+			console.log(budget);
+			console.log('Selector searching for:' + domStrings.totalIncome);
+			document.querySelector(domStrings.totalIncome).textContent = budget.income;
+			document.querySelector(domStrings.totalExpenses).textContent = budget.expenses,
+			document.querySelector(domStrings.percentageSpent).textContent = budget.percentage
+			console.groupEnd();
+
 		}
+
+		// setBudget: setBudget(budget) {
+		//	console.groupCollapsed('Update budget of the GUI');
+		//	console.log('UIController #setBudget argument (budget):');
+		//	console.log(budget);
+		//	console.groupEnd();
+		//}
 	}
 
 }) ();
@@ -446,8 +486,9 @@ var controller = (function(budgetCtrl, UICtrl) {
 		// 1. Calculate the budget
 		budgetController.calculateBudget();
 		// 2. Return the budget
-
+		budget = budgetController.getBudget();
 		// 3. Display the budget on the UI
+		UICtrl.setBudget(budget);	
 	};
 
 	
