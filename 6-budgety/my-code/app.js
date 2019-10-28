@@ -261,6 +261,7 @@ var budgetController = (function() {
 
 		getBudget: function() {
 			return {
+				budget: data.totals.income - data.totals.expenses,
 				expenses: data.totals.expenses,
 				income: data.totals.income,
 				percentage: data.totals.percentage
@@ -303,6 +304,7 @@ var UIController = (function() {
             inputDescription: '.add__description',
             inputValue: '.add__value',
 			percentageSpent: '.budget__expenses--percentage',
+			totalBudget: '.budget__value',
 			totalIncome: '.budget__income--value',
 			totalExpenses: '.budget__expenses--value'
     };
@@ -395,6 +397,18 @@ var UIController = (function() {
 			console.log('User Interface Controller #setBudget');
 			console.log(budget);
 			console.log('Selector searching for:' + domStrings.totalIncome);
+			console.log('Budget value=' + budget.budget);
+			if (budget.budget === 0) {
+				console.log('Trying to set 0.');
+				document.querySelector(domStrings.totalBudget).textContent = '0';
+			} else if (budget.budget < 0) {
+				console.log('Trying to set budget=' + budget.budget);
+				document.querySelector(domStrings.totalBudget).textContent = '- ' + budget.budget;
+			} else {
+				console.log('Trying to set budget=' + budget.budget);
+				document.querySelector(domStrings.totalBudget).textContent = '+ ' + budget.budget;
+			}
+
 			if (budget.income === 0) {
 				document.querySelector(domStrings.totalIncome).textContent = '0';
 			} else {
