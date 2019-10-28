@@ -395,9 +395,17 @@ var UIController = (function() {
 			console.log('User Interface Controller #setBudget');
 			console.log(budget);
 			console.log('Selector searching for:' + domStrings.totalIncome);
-			document.querySelector(domStrings.totalIncome).textContent = budget.income;
-			document.querySelector(domStrings.totalExpenses).textContent = budget.expenses,
-			document.querySelector(domStrings.percentageSpent).textContent = budget.percentage
+			if (budget.income === 0) {
+				document.querySelector(domStrings.totalIncome).textContent = '0';
+			} else {
+				document.querySelector(domStrings.totalIncome).textContent = '+ ' + budget.income;
+			}
+			if (budget.expenses === 0) {
+				document.querySelector(domStrings.totalExpenses).textContent = '0';
+			} else {
+				document.querySelector(domStrings.totalExpenses).textContent = '- ' + budget.expenses;
+			}
+			document.querySelector(domStrings.percentageSpent).textContent = budget.percentage + '%';
 			console.groupEnd();
 
 		}
