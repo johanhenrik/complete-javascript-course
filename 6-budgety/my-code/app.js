@@ -18,6 +18,7 @@
  *  6) Clearing the input fields
  *  7) Updating the budget
  *  8) Updating the budget in the Graphical User Interface
+ *  9) Setting start budget to 0.
  *
  * Designing a module pattern
  * -------------------------------------------------------------------------
@@ -260,10 +261,16 @@ var budgetController = (function() {
 		},
 
 		getBudget: function() {
+			console.groupCollapsed('Returning budget:');
+			console.log('budget=' + ( data.totals.inc - data.totals.exp).toString());
+			console.log('expenses=' + data.totals.exp.toString());
+			console.log('income=' + data.totals.inc.toString());
+			console.log('expenses=' + data.totals.percentage.toString());
+			console.groupEnd();
 			return {
-				budget: data.totals.income - data.totals.expenses,
-				expenses: data.totals.expenses,
-				income: data.totals.income,
+				budget: data.totals.inc - data.totals.exp,
+				expenses: data.totals.exp,
+				income: data.totals.inc,
 				percentage: data.totals.percentage
 			}
 		},
@@ -396,6 +403,10 @@ var UIController = (function() {
 			console.groupCollapsed('Update budget of the GUI');
 			console.log('User Interface Controller #setBudget');
 			console.log(budget);
+			if (budget === undefined) {
+				console.log('Budget is undefined.');
+				console.log('Inserting zero as values.');
+			} // else {
 			console.log('Selector searching for:' + domStrings.totalIncome);
 			console.log('Budget value=' + budget.budget);
 			if (budget.budget === 0) {
@@ -513,7 +524,15 @@ var controller = (function(budgetCtrl, UICtrl) {
 		UICtrl.setBudget(budget);	
 	};
 
-	
+	/*
+	 * Inintializing the controller module. Initially both the event listeners
+	 * are added to the controller. There is one listener connected to the
+	 * keyboard and one connected to add button. These listeners are activated
+	 * when a user tries to insert a budget item into the website.
+	 *
+	 * After the event listeners have been started the gui is updated to 
+	 * display a budget with values set to zero.
+	 */
 	
 	document.querySelector('.add__btn').addEventListener('click', function() {
 		ctrlAddItem();
@@ -526,6 +545,8 @@ var controller = (function(budgetCtrl, UICtrl) {
 			ctrlAddItem();
 		}
 	});
+
+	UICtrl.setBudget(budgetController.getBudget());
 	
 	
 }) (budgetController, UIController);
