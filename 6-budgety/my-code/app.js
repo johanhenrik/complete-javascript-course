@@ -223,8 +223,8 @@ var budgetController = (function() {
 					console.log('Total expenses=' + expenses);
 				}
 			}
-			data.totals.income = income;
-			data.totals.expenses = expenses;
+			data.totals.inc = income;
+			data.totals.exp = expenses;
 			console.log('Budget is=' + (income - expenses).valueOf())
 			if (income === 0) {
 				data.totals.percentage = 100;
